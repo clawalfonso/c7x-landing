@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CØR7EX — The Neural Operating System</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #000; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; }
+canvas { position: fixed; top: 0; left: 0; z-index: 0; }
+.content {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  z-index: 10; pointer-events: none;
+}
+@font-face {
+  font-family: 'Mono';
+  src: local('SF Mono'), local('Fira Code'), local('JetBrains Mono'), local('Consolas');
+}
+h1 {
+  font-family: 'Mono', 'SF Mono', 'Fira Code', 'Courier New', monospace;
+  font-size: clamp(3.5rem, 11vw, 9rem);
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  color: #fff;
+  text-shadow:
+    0 0 2px #fff,
+    0 0 20px rgba(255, 165, 50, 0.8),
+    0 0 60px rgba(255, 165, 50, 0.4),
+    0 0 120px rgba(255, 165, 50, 0.2);
+  animation: glitchIn 1.5s ease-out, flicker 4s ease-in-out 2s infinite;
+  user-select: none;
+  position: relative;
+}
+h1 .char {
+  display: inline-block;
+  animation: charReveal 0.8s ease-out both;
+}
+h1 .char:nth-child(1) { animation-delay: 0.3s; }
+h1 .char:nth-child(2) { animation-delay: 0.45s; color: #ffa532; text-shadow: 0 0 4px #ffa532, 0 0 30px #ffa532, 0 0 80px rgba(255,165,50,0.5); }
+h1 .char:nth-child(3) { animation-delay: 0.6s; }
+h1 .char:nth-child(4) { animation-delay: 0.75s; color: #ffa532; font-size: 0.75em; vertical-align: 0.08em; text-shadow: 0 0 4px #ffa532, 0 0 30px #ffa532; }
+h1 .char:nth-child(5) { animation-delay: 0.9s; }
+h1 .char:nth-child(6) { animation-delay: 1.05s; }
+h1::before, h1::after {
+  content: 'CØR7EX';
+  position: absolute; top: 0; left: 0; right: 0;
+  overflow: hidden;
+  letter-spacing: 0.2em;
+}
+h1::before {
+  text-shadow: -2px 0 #ff004080;
+  animation: glitch1 3s infinite linear alternate-reverse;
+  clip-path: inset(0 0 85% 0);
+}
+h1::after {
+  text-shadow: 2px 0 #ffa53260;
+  animation: glitch2 2.5s infinite linear alternate-reverse;
+  clip-path: inset(85% 0 0 0);
+}
+.slogan {
+  font-family: 'Mono', 'SF Mono', 'Courier New', monospace;
+  font-size: clamp(0.7rem, 1.8vw, 1.1rem);
+  color: rgba(255, 165, 50, 0.5);
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  margin-top: 1.5rem;
+  animation: fadeIn 3s ease-out 1.2s both;
+  font-weight: 300;
+}
+.cursor-blink {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: #ffa532;
+  margin-left: 6px;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}
+@keyframes charReveal {
+  0% { opacity: 0; transform: translateY(-20px) scaleY(0.3); filter: blur(8px); }
+  50% { opacity: 1; transform: translateY(2px) scaleY(1.1); filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0) scaleY(1); filter: blur(0); }
+}
+@keyframes glitchIn {
+  0%, 10% { opacity: 0; }
+  11% { opacity: 1; transform: translate(-3px, 2px) skewX(-2deg); }
+  12% { transform: translate(3px, -1px) skewX(1deg); }
+  13% { transform: translate(0) skewX(0); }
+  30% { transform: translate(-1px, 1px); }
+  31% { transform: translate(0); }
+  100% { opacity: 1; transform: translate(0); }
+}
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  96% { opacity: 0.9; }
+  97% { opacity: 1; }
+}
+@keyframes glitch1 {
+  0%, 95% { transform: translate(0); }
+  96% { transform: translate(-3px, 1px); }
+  97% { transform: translate(2px, -1px); }
+  98% { transform: translate(-1px, 2px); }
+  100% { transform: translate(0); }
+}
+@keyframes glitch2 {
+  0%, 93% { transform: translate(0); }
+  94% { transform: translate(2px, -2px); }
+  95% { transform: translate(-3px, 1px); }
+  96% { transform: translate(1px, 1px); }
+  100% { transform: translate(0); }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+<canvas id="neural"></canvas>
+<div class="content">
+  <h1><span class="char">C</span><span class="char">Ø</span><span class="char">R</span><span class="char">7</span><span class="char">E</span><span class="char">X</span></h1>
+  <div class="slogan">Where intelligence becomes infrastructure<span class="cursor-blink"></span></div>
+</div>
+<script>
+const canvas = document.getElementById('neural');
+const ctx = canvas.getContext('2d');
+let W, H, nodes = [], edges = [], pulses = [], mouse = { x: -1000, y: -1000 };
+const NODE_COUNT = 220;
+const CONNECT_DIST = 160;
+const PULSE_SPEED = 2.0;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// Create nodes with parallax layers
+for (let i = 0; i < NODE_COUNT; i++) {
+  nodes.push({
+    x: Math.random() * W,
+    y: Math.random() * H,
+    vx: (Math.random() - 0.5) * 0.12,
+    vy: (Math.random() - 0.5) * 0.12,
+    r: Math.random() * 2 + 1,
+    layer: Math.random() < 0.3 ? 0 : Math.random() < 0.6 ? 1 : 2, // 0=back, 1=mid, 2=front
+    brightness: Math.random() * 0.5 + 0.2,
+  });
+}
+
+// Parallax factors per layer
+const parallax = [0.02, 0.05, 0.1];
+const layerAlpha = [0.15, 0.35, 0.7];
+const layerColor = [
+  [120, 70, 20],   // deep blue
+  [200, 130, 40],  // mid blue
+  [255, 165, 50],  // bright blue
+];
+
+document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+function spawnPulse() {
+  if (edges.length === 0) return;
+  const edge = edges[Math.floor(Math.random() * edges.length)];
+  pulses.push({
+    from: edge[0], to: edge[1],
+    t: 0, speed: PULSE_SPEED + Math.random() * 1.5,
+    intensity: Math.random() * 0.6 + 0.4,
+  });
+}
+
+function update() {
+  // Move nodes
+  for (const n of nodes) {
+    n.x += n.vx;
+    n.y += n.vy;
+    if (n.x < -50) n.x = W + 50;
+    if (n.x > W + 50) n.x = -50;
+    if (n.y < -50) n.y = H + 50;
+    if (n.y > H + 50) n.y = -50;
+  }
+
+  // Build edges
+  edges = [];
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      if (nodes[i].layer !== nodes[j].layer) continue;
+      const dx = nodes[i].x - nodes[j].x;
+      const dy = nodes[i].y - nodes[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < CONNECT_DIST) {
+        edges.push([i, j, dist]);
+      }
+    }
+  }
+
+  // Update pulses
+  for (let i = pulses.length - 1; i >= 0; i--) {
+    pulses[i].t += pulses[i].speed / 100;
+    if (pulses[i].t > 1) pulses.splice(i, 1);
+  }
+
+  // Spawn pulses
+  if (Math.random() < 0.15) spawnPulse();
+}
+
+function draw() {
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
+  ctx.fillRect(0, 0, W, H);
+
+  const cx = W / 2, cy = H / 2;
+  const mx = mouse.x - cx, my = mouse.y - cy;
+
+  // Draw per layer (back to front)
+  for (let layer = 0; layer < 3; layer++) {
+    const px = mx * parallax[layer];
+    const py = my * parallax[layer];
+    const alpha = layerAlpha[layer];
+    const [cr, cg, cb] = layerColor[layer];
+
+    // Edges
+    for (const [i, j, dist] of edges) {
+      if (nodes[i].layer !== layer) continue;
+      const a = alpha * (1 - dist / CONNECT_DIST) * 0.6;
+      ctx.strokeStyle = `rgba(${cr},${cg},${cb},${a})`;
+      ctx.lineWidth = layer === 2 ? 1 : 0.5;
+      ctx.beginPath();
+      ctx.moveTo(nodes[i].x + px, nodes[i].y + py);
+      ctx.lineTo(nodes[j].x + px, nodes[j].y + py);
+      ctx.stroke();
+    }
+
+    // Nodes
+    for (const n of nodes) {
+      if (n.layer !== layer) continue;
+      const nx = n.x + px;
+      const ny = n.y + py;
+
+      // Mouse proximity glow
+      const mdx = mouse.x - nx, mdy = mouse.y - ny;
+      const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
+      const glow = mDist < 200 ? (1 - mDist / 200) * 0.8 : 0;
+
+      const nodeAlpha = alpha * n.brightness + glow;
+      ctx.fillStyle = `rgba(${cr},${cg},${cb},${nodeAlpha})`;
+      ctx.beginPath();
+      ctx.arc(nx, ny, n.r * (1 + glow * 2), 0, Math.PI * 2);
+      ctx.fill();
+
+      if (glow > 0.3) {
+        ctx.shadowColor = `rgba(${cr},${cg},${cb},${glow})`;
+        ctx.shadowBlur = 20;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+  }
+
+  // Draw pulses (light balls)
+  for (const p of pulses) {
+    const ni = nodes[p.from], nj = nodes[p.to];
+    const layer = ni.layer;
+    const px = mx * parallax[layer];
+    const py = my * parallax[layer];
+    const [cr, cg, cb] = layerColor[layer];
+
+    const x = ni.x + (nj.x - ni.x) * p.t + px;
+    const y = ni.y + (nj.y - ni.y) * p.t + py;
+
+    // Outer glow
+    const grad = ctx.createRadialGradient(x, y, 0, x, y, 25);
+    grad.addColorStop(0, `rgba(255, 255, 255, ${p.intensity * 0.9})`);
+    grad.addColorStop(0.2, `rgba(${cr},${cg},${cb}, ${p.intensity * 0.6})`);
+    grad.addColorStop(1, `rgba(${cr},${cg},${cb}, 0)`);
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(x, y, 25, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Core
+    ctx.fillStyle = `rgba(255, 255, 255, ${p.intensity})`;
+    ctx.beginPath();
+    ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function loop() {
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+// Initial clear
+ctx.fillStyle = '#000';
+ctx.fillRect(0, 0, W, H);
+loop();
+</script>
+</body>
+</html>
