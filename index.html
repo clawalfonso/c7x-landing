@@ -2,26 +2,25 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>CØR7EX — The Neural Operating System</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #000; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; }
-canvas { position: fixed; top: 0; left: 0; z-index: 0; }
-.content {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+body { background: #000; overflow-x: hidden; overflow-y: auto; font-family: 'Share Tech Mono', monospace; min-height: 100vh; }
+canvas { position: fixed; top: 0; left: 0; z-index: 0; width: 100%; height: 100%; }
+
+/* HERO SECTION */
+.hero {
+  position: relative; min-height: 100vh; min-height: 100dvh;
   display: flex; flex-direction: column; justify-content: center; align-items: center;
-  z-index: 10; pointer-events: none;
-}
-@font-face {
-  font-family: 'Mono';
-  src: local('SF Mono'), local('Fira Code'), local('JetBrains Mono'), local('Consolas');
+  z-index: 10; padding: 20px;
 }
 h1 {
-  font-family: 'Mono', 'SF Mono', 'Fira Code', 'Courier New', monospace;
-  font-size: clamp(3.5rem, 11vw, 9rem);
-  font-weight: 400;
-  letter-spacing: 0.2em;
+  font-family: 'Orbitron', 'Share Tech Mono', monospace;
+  font-size: clamp(2.8rem, 12vw, 9rem);
+  font-weight: 900;
+  letter-spacing: 0.15em;
   color: #fff;
   text-shadow:
     0 0 2px #fff,
@@ -31,6 +30,7 @@ h1 {
   animation: glitchIn 1.5s ease-out, flicker 4s ease-in-out 2s infinite;
   user-select: none;
   position: relative;
+  text-align: center;
 }
 h1 .char {
   display: inline-block;
@@ -46,7 +46,9 @@ h1::before, h1::after {
   content: 'CØR7EX';
   position: absolute; top: 0; left: 0; right: 0;
   overflow: hidden;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.15em;
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
 }
 h1::before {
   text-shadow: -2px 0 #ff004080;
@@ -59,24 +61,204 @@ h1::after {
   clip-path: inset(85% 0 0 0);
 }
 .slogan {
-  font-family: 'Mono', 'SF Mono', 'Courier New', monospace;
-  font-size: clamp(0.7rem, 1.8vw, 1.1rem);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: clamp(0.65rem, 2.5vw, 1.1rem);
   color: rgba(255, 165, 50, 0.5);
-  letter-spacing: 0.4em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   margin-top: 1.5rem;
   animation: fadeIn 3s ease-out 1.2s both;
-  font-weight: 300;
+  font-weight: 400;
+  text-align: center;
+  padding: 0 10px;
 }
 .cursor-blink {
   display: inline-block;
-  width: 2px;
-  height: 1em;
+  width: 2px; height: 1em;
   background: #ffa532;
   margin-left: 6px;
   vertical-align: text-bottom;
   animation: blink 1s step-end infinite;
 }
+
+/* SCROLL INDICATOR */
+.scroll-hint {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  animation: fadeIn 2s ease-out 3s both, bounce 2s ease-in-out 4s infinite;
+  z-index: 10;
+}
+.scroll-hint span {
+  display: block; width: 24px; height: 24px;
+  border-right: 2px solid rgba(255,165,50,0.4);
+  border-bottom: 2px solid rgba(255,165,50,0.4);
+  transform: rotate(45deg);
+  margin: -8px auto 0;
+}
+
+/* SIGNUP SECTION */
+.signup-section {
+  position: relative; z-index: 10;
+  padding: 80px 20px 120px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.signup-box {
+  background: rgba(255,165,50,0.03);
+  border: 1px solid rgba(255,165,50,0.12);
+  border-radius: 16px;
+  padding: 48px 40px;
+  max-width: 500px; width: 100%;
+  backdrop-filter: blur(20px);
+  animation: fadeIn 1s ease-out both;
+}
+.signup-box h2 {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+.signup-box .sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: clamp(0.7rem, 2vw, 0.85rem);
+  color: rgba(255,165,50,0.5);
+  text-align: center;
+  margin-bottom: 32px;
+  letter-spacing: 0.1em;
+}
+.input-group {
+  display: flex; gap: 0;
+  margin-bottom: 12px;
+}
+.input-group input {
+  flex: 1;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,165,50,0.2);
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  padding: 16px 20px;
+  color: #fff;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s;
+}
+.input-group input::placeholder { color: rgba(255,255,255,0.2); }
+.input-group input:focus {
+  border-color: #ffa532;
+  background: rgba(255,165,50,0.05);
+  box-shadow: 0 0 20px rgba(255,165,50,0.1);
+}
+.input-group button {
+  background: #ffa532;
+  border: 1px solid #ffa532;
+  border-radius: 0 8px 8px 0;
+  padding: 16px 28px;
+  color: #000;
+  font-family: 'Orbitron', monospace;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+}
+.input-group button:hover {
+  background: #ffb854;
+  box-shadow: 0 0 30px rgba(255,165,50,0.4);
+  transform: translateY(-1px);
+}
+.signup-note {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.15);
+  text-align: center;
+  margin-top: 8px;
+  letter-spacing: 0.05em;
+}
+
+/* SUCCESS STATE */
+.signup-success {
+  display: none;
+  text-align: center;
+  padding: 20px 0;
+}
+.signup-success .checkmark {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  animation: fadeIn 0.5s ease-out;
+}
+.signup-success h3 {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.1rem;
+  color: #ffa532;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+.signup-success p {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.8;
+  max-width: 380px;
+  margin: 0 auto;
+}
+.signup-success .warning {
+  margin-top: 20px;
+  padding: 16px;
+  background: rgba(255,165,50,0.05);
+  border: 1px solid rgba(255,165,50,0.15);
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: rgba(255,165,50,0.6);
+  font-style: italic;
+}
+
+/* FOOTER */
+.footer {
+  position: relative; z-index: 10;
+  text-align: center;
+  padding: 30px 20px;
+  border-top: 1px solid rgba(255,165,50,0.06);
+}
+.footer span {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.1);
+  letter-spacing: 0.15em;
+}
+
+/* MOBILE OPTIMIZATIONS */
+@media (max-width: 600px) {
+  h1 { letter-spacing: 0.08em; }
+  h1::before, h1::after { letter-spacing: 0.08em; }
+  .slogan { letter-spacing: 0.15em; margin-top: 1rem; }
+  .signup-box { padding: 36px 24px; border-radius: 12px; }
+  .input-group { flex-direction: column; gap: 12px; }
+  .input-group input {
+    border-radius: 8px; border-right: 1px solid rgba(255,165,50,0.2);
+    text-align: center; padding: 18px 20px;
+  }
+  .input-group input:focus { border-right-color: #ffa532; }
+  .input-group button {
+    border-radius: 8px; padding: 18px 28px; font-size: 0.9rem;
+    box-shadow: 0 0 20px rgba(255,165,50,0.2);
+  }
+  .signup-section { padding: 40px 16px 80px; }
+  .scroll-hint { bottom: 20px; }
+}
+
+/* TOUCH GLOW for mobile */
+@media (hover: none) {
+  h1 {
+    text-shadow:
+      0 0 4px #fff,
+      0 0 30px rgba(255, 165, 50, 1),
+      0 0 80px rgba(255, 165, 50, 0.6),
+      0 0 160px rgba(255, 165, 50, 0.3);
+  }
+}
+
 @keyframes charReveal {
   0% { opacity: 0; transform: translateY(-20px) scaleY(0.3); filter: blur(8px); }
   50% { opacity: 1; transform: translateY(2px) scaleY(1.1); filter: blur(0); }
@@ -121,20 +303,71 @@ h1::after {
   0% { opacity: 0; transform: translateY(10px); }
   100% { opacity: 1; transform: translateY(0); }
 }
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(10px); }
+}
 </style>
 </head>
 <body>
 <canvas id="neural"></canvas>
-<div class="content">
+
+<!-- HERO -->
+<section class="hero">
   <h1><span class="char">C</span><span class="char">Ø</span><span class="char">R</span><span class="char">7</span><span class="char">E</span><span class="char">X</span></h1>
   <div class="slogan">Where intelligence becomes infrastructure<span class="cursor-blink"></span></div>
+  <div class="scroll-hint"><span></span></div>
+</section>
+
+<!-- SIGNUP -->
+<section class="signup-section">
+  <div class="signup-box">
+    <h2>GET EARLY ACCESS</h2>
+    <div class="sub">// join the neural network</div>
+    <div id="signupForm">
+      <div class="input-group">
+        <input type="email" id="emailInput" placeholder="your@email.com" required>
+        <button onclick="submitSignup()">CONNECT</button>
+      </div>
+      <div class="signup-note">No spam. Only signals.</div>
+    </div>
+    <div class="signup-success" id="signupSuccess">
+      <div class="checkmark">⚡</div>
+      <h3>SIGNAL RECEIVED</h3>
+      <p>You're in the queue. Rafael will review your request personally.</p>
+      <div class="warning">⚠️ Fair warning: He's building the future, so response times may vary from "instantly" to "when the neural network allows it." Don't take it personally — even AI has to wait sometimes.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="footer">
+  <span>© 2026 CØR7EX — c7x.ai</span>
 </div>
+
 <script>
+// SIGNUP
+function submitSignup() {
+  const email = document.getElementById('emailInput').value;
+  if (!email || !email.includes('@')) { document.getElementById('emailInput').style.borderColor = '#ff0040'; return; }
+  
+  // Store signup (localStorage for now)
+  const signups = JSON.parse(localStorage.getItem('c7x_signups') || '[]');
+  signups.push({ email, date: new Date().toISOString() });
+  localStorage.setItem('c7x_signups', JSON.stringify(signups));
+  
+  document.getElementById('signupForm').style.display = 'none';
+  document.getElementById('signupSuccess').style.display = 'block';
+}
+document.getElementById('emailInput')?.addEventListener('keydown', e => { if (e.key === 'Enter') submitSignup(); });
+
+// NEURAL NETWORK CANVAS
 const canvas = document.getElementById('neural');
 const ctx = canvas.getContext('2d');
 let W, H, nodes = [], edges = [], pulses = [], mouse = { x: -1000, y: -1000 };
-const NODE_COUNT = 220;
-const CONNECT_DIST = 160;
+const isMobile = window.innerWidth < 600;
+const NODE_COUNT = isMobile ? 100 : 220;
+const CONNECT_DIST = isMobile ? 120 : 160;
 const PULSE_SPEED = 2.0;
 
 function resize() {
@@ -144,7 +377,6 @@ function resize() {
 window.addEventListener('resize', resize);
 resize();
 
-// Create nodes with parallax layers
 for (let i = 0; i < NODE_COUNT; i++) {
   nodes.push({
     x: Math.random() * W,
@@ -152,82 +384,57 @@ for (let i = 0; i < NODE_COUNT; i++) {
     vx: (Math.random() - 0.5) * 0.12,
     vy: (Math.random() - 0.5) * 0.12,
     r: Math.random() * 2 + 1,
-    layer: Math.random() < 0.3 ? 0 : Math.random() < 0.6 ? 1 : 2, // 0=back, 1=mid, 2=front
+    layer: Math.random() < 0.3 ? 0 : Math.random() < 0.6 ? 1 : 2,
     brightness: Math.random() * 0.5 + 0.2,
   });
 }
 
-// Parallax factors per layer
 const parallax = [0.02, 0.05, 0.1];
 const layerAlpha = [0.15, 0.35, 0.7];
-const layerColor = [
-  [120, 70, 20],   // deep blue
-  [200, 130, 40],  // mid blue
-  [255, 165, 50],  // bright blue
-];
+const layerColor = [ [120, 70, 20], [200, 130, 40], [255, 165, 50] ];
 
 document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+document.addEventListener('touchmove', e => { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }, { passive: true });
 
 function spawnPulse() {
   if (edges.length === 0) return;
   const edge = edges[Math.floor(Math.random() * edges.length)];
-  pulses.push({
-    from: edge[0], to: edge[1],
-    t: 0, speed: PULSE_SPEED + Math.random() * 1.5,
-    intensity: Math.random() * 0.6 + 0.4,
-  });
+  pulses.push({ from: edge[0], to: edge[1], t: 0, speed: PULSE_SPEED + Math.random() * 1.5, intensity: Math.random() * 0.6 + 0.4 });
 }
 
 function update() {
-  // Move nodes
   for (const n of nodes) {
-    n.x += n.vx;
-    n.y += n.vy;
-    if (n.x < -50) n.x = W + 50;
-    if (n.x > W + 50) n.x = -50;
-    if (n.y < -50) n.y = H + 50;
-    if (n.y > H + 50) n.y = -50;
+    n.x += n.vx; n.y += n.vy;
+    if (n.x < -50) n.x = W + 50; if (n.x > W + 50) n.x = -50;
+    if (n.y < -50) n.y = H + 50; if (n.y > H + 50) n.y = -50;
   }
-
-  // Build edges
   edges = [];
   for (let i = 0; i < nodes.length; i++) {
     for (let j = i + 1; j < nodes.length; j++) {
       if (nodes[i].layer !== nodes[j].layer) continue;
-      const dx = nodes[i].x - nodes[j].x;
-      const dy = nodes[i].y - nodes[j].y;
+      const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < CONNECT_DIST) {
-        edges.push([i, j, dist]);
-      }
+      if (dist < CONNECT_DIST) edges.push([i, j, dist]);
     }
   }
-
-  // Update pulses
   for (let i = pulses.length - 1; i >= 0; i--) {
     pulses[i].t += pulses[i].speed / 100;
     if (pulses[i].t > 1) pulses.splice(i, 1);
   }
-
-  // Spawn pulses
   if (Math.random() < 0.15) spawnPulse();
 }
 
 function draw() {
   ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
   ctx.fillRect(0, 0, W, H);
-
   const cx = W / 2, cy = H / 2;
   const mx = mouse.x - cx, my = mouse.y - cy;
 
-  // Draw per layer (back to front)
   for (let layer = 0; layer < 3; layer++) {
-    const px = mx * parallax[layer];
-    const py = my * parallax[layer];
+    const px = mx * parallax[layer], py = my * parallax[layer];
     const alpha = layerAlpha[layer];
     const [cr, cg, cb] = layerColor[layer];
 
-    // Edges
     for (const [i, j, dist] of edges) {
       if (nodes[i].layer !== layer) continue;
       const a = alpha * (1 - dist / CONNECT_DIST) * 0.6;
@@ -239,71 +446,48 @@ function draw() {
       ctx.stroke();
     }
 
-    // Nodes
     for (const n of nodes) {
       if (n.layer !== layer) continue;
-      const nx = n.x + px;
-      const ny = n.y + py;
-
-      // Mouse proximity glow
+      const nx = n.x + px, ny = n.y + py;
       const mdx = mouse.x - nx, mdy = mouse.y - ny;
       const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
       const glow = mDist < 200 ? (1 - mDist / 200) * 0.8 : 0;
-
       const nodeAlpha = alpha * n.brightness + glow;
       ctx.fillStyle = `rgba(${cr},${cg},${cb},${nodeAlpha})`;
       ctx.beginPath();
       ctx.arc(nx, ny, n.r * (1 + glow * 2), 0, Math.PI * 2);
       ctx.fill();
-
-      if (glow > 0.3) {
-        ctx.shadowColor = `rgba(${cr},${cg},${cb},${glow})`;
-        ctx.shadowBlur = 20;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-      }
+      if (glow > 0.3) { ctx.shadowColor = `rgba(${cr},${cg},${cb},${glow})`; ctx.shadowBlur = 20; ctx.fill(); ctx.shadowBlur = 0; }
     }
   }
 
-  // Draw pulses (light balls)
   for (const p of pulses) {
     const ni = nodes[p.from], nj = nodes[p.to];
     const layer = ni.layer;
-    const px = mx * parallax[layer];
-    const py = my * parallax[layer];
+    const px = mx * parallax[layer], py = my * parallax[layer];
     const [cr, cg, cb] = layerColor[layer];
-
     const x = ni.x + (nj.x - ni.x) * p.t + px;
     const y = ni.y + (nj.y - ni.y) * p.t + py;
-
-    // Outer glow
     const grad = ctx.createRadialGradient(x, y, 0, x, y, 25);
-    grad.addColorStop(0, `rgba(255, 255, 255, ${p.intensity * 0.9})`);
-    grad.addColorStop(0.2, `rgba(${cr},${cg},${cb}, ${p.intensity * 0.6})`);
-    grad.addColorStop(1, `rgba(${cr},${cg},${cb}, 0)`);
+    grad.addColorStop(0, `rgba(255,255,255,${p.intensity * 0.9})`);
+    grad.addColorStop(0.2, `rgba(${cr},${cg},${cb},${p.intensity * 0.6})`);
+    grad.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
     ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.arc(x, y, 25, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Core
-    ctx.fillStyle = `rgba(255, 255, 255, ${p.intensity})`;
-    ctx.beginPath();
-    ctx.arc(x, y, 2.5, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.beginPath(); ctx.arc(x, y, 25, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = `rgba(255,255,255,${p.intensity})`;
+    ctx.beginPath(); ctx.arc(x, y, 2.5, 0, Math.PI * 2); ctx.fill();
   }
 }
 
-function loop() {
-  update();
-  draw();
-  requestAnimationFrame(loop);
-}
-
-// Initial clear
-ctx.fillStyle = '#000';
-ctx.fillRect(0, 0, W, H);
+function loop() { update(); draw(); requestAnimationFrame(loop); }
+ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
 loop();
+
+// Intersection observer for signup section animation
+const signupObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.style.opacity = '1'; });
+}, { threshold: 0.2 });
+document.querySelectorAll('.signup-box').forEach(el => signupObs.observe(el));
 </script>
 </body>
 </html>
